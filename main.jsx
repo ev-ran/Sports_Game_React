@@ -1,32 +1,5 @@
 function Team(props) {
 
-    // this.shotSound = new Audio("./sounds/shotSound.mp3");
-    // this.scoreSound = new Audio("./sounds/scoreSound.mp3");
-
-
-    // shotHandler = () => {
-    //     let increment;
-    //     this.shotSound.play();
-    //     if (Math.random() >= 0.4) {
-    //         increment = 1;
-
-    //         setTimeout(() => { this.scoreSound.play() }, 200)
-
-    //     } else {
-    //         increment = 0;
-    //     }
-
-
-    //     this.setState((state, props) => ({
-    //         shots: state.shots + 1,
-    //         score: state.score + increment
-    //     }))
-    // }
-
-
-
-
-
     let shotPersentage = "";
 
     if (props.stats.shots !== 0) {
@@ -65,6 +38,35 @@ function Team(props) {
 
 }
 //===========================================
+
+function ScoreBoard(props) {
+
+    return (
+
+        <div className="ScoreBoard">
+            <div className="teamStats">
+                <h3>VISITORS</h3>
+                <h3>{props.visitingTeamStats.score}</h3>
+            </div>
+
+            <h3>SCOREBOARD</h3>
+
+            <div className="teamStats">
+
+                <h3>HOME</h3>
+                <h3>{props.homeTeamStats.score}</h3>
+
+            </div>
+
+        </div>
+
+    )
+}
+
+
+
+
+//===========================================
 class Game extends React.Component {
     constructor(props) {
         super(props)
@@ -96,14 +98,11 @@ class Game extends React.Component {
         // let increment;
         this.shotSound.play();
         if (Math.random() > 0.5) {
-           score += 1;
+            score += 1;
 
             setTimeout(() => { this.scoreSound.play() }, 200)
 
-        } 
-        // else {
-        //     increment = 0;
-        // }
+        }
 
 
         this.setState((state, props) => ({
@@ -115,12 +114,32 @@ class Game extends React.Component {
         }))
     }
 
+    resetGame = () => {
+        this.setState((state, props) => ({
+            resetCount: state.resetCount + 1,
+            homeTeamStats: {
+                shots: 0,
+                score: 0
+            },
+            visitingTeamStats: {
+                shots: 0,
+                score: 0
+            }
+
+        }))
+    }
+
     render() {
 
         return (
 
             <div className="Game">
-                <h2>Welcome to {this.props.venue}</h2>
+                <ScoreBoard
+                    visitingTeamStats={this.state.visitingTeamStats}
+                    homeTeamStats={this.state.homeTeamStats}
+
+                />
+                <h1>Welcome to {this.props.venue}</h1>
                 <div className="stats" >
 
                     <Team
@@ -134,7 +153,7 @@ class Game extends React.Component {
                         <h1>VS</h1>
                         <div>
                             <strong>Resets: </strong> {this.state.resetCount}
-                            <button>Reset Game</button>
+                            <button onClick={this.resetGame}>Reset Game</button>
                         </div>
 
                     </div>
